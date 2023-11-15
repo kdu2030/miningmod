@@ -1,8 +1,11 @@
 package kevin.miningmod;
 
+import kevin.miningmod.events.BlockBrokenEvent;
 import kevin.miningmod.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,5 +24,6 @@ public class MiningMod implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 		ModItems.registerModItems();
+		PlayerBlockBreakEvents.BEFORE.register(BlockBrokenEvent::onBlockBroken);
 	}
 }
