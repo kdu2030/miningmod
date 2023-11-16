@@ -13,9 +13,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.joml.Vector3i;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class BlockBrokenEvent {
     public static final int MAX_DISTANCE = 10;
@@ -27,7 +25,7 @@ public class BlockBrokenEvent {
         return MathHelper.sqrt(radicand);
     }
 
-    public static List<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, BlockData currentBlock, int directionFromPreviousBlock, List<BlockData> blocksFound) {
+    public static Set<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, BlockData currentBlock, int directionFromPreviousBlock, Set<BlockData> blocksFound) {
         BlockPos startingBlockPos = startingBlock.getBlockPos();
         BlockPos currentBlockPos = currentBlock.getBlockPos();
         if (calculateDistance(startingBlockPos, currentBlockPos) > MAX_DISTANCE) {
@@ -40,8 +38,8 @@ public class BlockBrokenEvent {
             }
             BlockPos potentialBlockPos = currentBlockPos.add(BLOCK_POS_MODS[i]);
             BlockState potentialBlockState = world.getBlockState(potentialBlockPos);
-            if (potentialBlockState.getBlock().equals(startingBlock.getBlockState().getBlock())) {
-                BlockData newBlockFound = new BlockData(potentialBlockPos, potentialBlockState);
+            BlockData newBlockFound = new BlockData(potentialBlockPos, potentialBlockState);
+            if (!blocksFound.contains(newBlockFound) && potentialBlockState.getBlock().equals(startingBlock.getBlockState().getBlock())) {
                 blocksFound.add(newBlockFound);
                 blocksFound = findBlocksOfTheSameType(world, startingBlock, newBlockFound, i, blocksFound);
             }
@@ -50,8 +48,8 @@ public class BlockBrokenEvent {
         return blocksFound;
     }
 
-    public static List<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, PlayerEntity player) {
-        List<BlockData> blocksFound = new ArrayList<>();
+    public static Set<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, PlayerEntity player) {
+        Set<BlockData> blocksFound = new HashSet<>();
         blocksFound = findBlocksOfTheSameType(world, startingBlock, startingBlock, -1, blocksFound);
         for (BlockData blockFound : blocksFound) {
             BlockPos blockFoundPos = blockFound.getBlockPos();
