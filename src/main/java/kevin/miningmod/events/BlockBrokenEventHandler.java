@@ -1,9 +1,12 @@
 package kevin.miningmod.events;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
@@ -55,13 +58,39 @@ public class BlockBrokenEventHandler {
         return blocksFound;
     }
 
-    public Set<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, PlayerEntity player) {
+    public void decreaseDurability(PlayerEntity player, Block blockBroken, int numBlocksBroken){
+        Hand hand = player.getActiveHand();
+        ItemStack activeItemStack = player.getStackInHand(hand);
+        int damageAmount = (int) (blockBroken.getHardness() * numBlocksBroken);
+        int originalDurability  = activeItemStack.getDamage();
+        if(activeItemStack.isDamageable()){
+            activeItemStack.damage(damageAmount, player, (p) -> {
+                if(originalDurability - damageAmount <= 0){
+                    player.handleStatus(hand == Hand.MAIN_HAND ? EntityStatuses.BREAK_MAINHAND : EntityStatuses.BREAK_OFFHAND);
+                }
+            });
+        }
+    }
+
+    public void findBlocksOfTheSameType(World world, BlockData startingBlock, PlayerEntity player) {
         Set<BlockData> blocksFound = new HashSet<>();
         blocksFound = findBlocksOfTheSameType(world, startingBlock, startingBlock, -1, blocksFound);
-        for (BlockData blockFound : blocksFound) {
+
+        if(blocksFound.size() == 0){
+            return;
+        }
+
+        BlockData[] blocksFoundArr = new BlockData[blocksFound.size()];
+        blocksFoundArr = blocksFound.toArray(blocksFoundArr);
+        Block blockType = blocksFoundArr[0].getBlockState().getBlock();
+
+        for (BlockData blockFound : blocksFoundArr) {
             world.breakBlock(blockFound.getBlockPos(), !player.isCreative());
         }
-        return blocksFound;
+
+        if(!player.isCreative()){
+            decreaseDurability(player, blockType, blocksFoundArr.length);
+        }
     }
 
     public boolean onBlockBroken(World world, PlayerEntity player, BlockPos blockPos, BlockState blockState, BlockEntity block) {
