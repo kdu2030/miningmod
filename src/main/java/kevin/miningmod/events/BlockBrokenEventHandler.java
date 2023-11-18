@@ -3,6 +3,7 @@ package kevin.miningmod.events;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
@@ -31,7 +32,7 @@ public class BlockBrokenEventHandler {
         return BLOCK_POS_MODS[directionAIndex].multiply(-1).compareTo(BLOCK_POS_MODS[directionBIndex]) == 0;
     }
 
-    public static Set<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, BlockData currentBlock, int directionFromPreviousBlock, Set<BlockData> blocksFound) {
+    public Set<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, BlockData currentBlock, int directionFromPreviousBlock, Set<BlockData> blocksFound) {
         BlockPos startingBlockPos = startingBlock.getBlockPos();
         BlockPos currentBlockPos = currentBlock.getBlockPos();
         if (calculateDistance(startingBlockPos, currentBlockPos) > MAX_DISTANCE) {
@@ -54,19 +55,28 @@ public class BlockBrokenEventHandler {
         return blocksFound;
     }
 
-    public static Set<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock) {
+    public Set<BlockData> findBlocksOfTheSameType(World world, BlockData startingBlock, PlayerEntity player) {
         Set<BlockData> blocksFound = new HashSet<>();
         blocksFound = findBlocksOfTheSameType(world, startingBlock, startingBlock, -1, blocksFound);
         for (BlockData blockFound : blocksFound) {
-            world.breakBlock(blockFound.getBlockPos(), true);
+            world.breakBlock(blockFound.getBlockPos(), !player.isCreative());
         }
         return blocksFound;
     }
 
-    public static boolean onBlockBroken(World world, PlayerEntity player, BlockPos blockPos, BlockState blockState, BlockEntity block) {
-        BlockData startingBlock = new BlockData(blockPos, blockState);
-        findBlocksOfTheSameType(world, startingBlock);
+    public boolean onBlockBroken(World world, PlayerEntity player, BlockPos blockPos, BlockState blockState, BlockEntity block) {
+        if(isMinerActivated){
+            BlockData startingBlock = new BlockData(blockPos, blockState);
+            findBlocksOfTheSameType(world, startingBlock, player);
+        }
         return true;
+    }
+    public boolean isMinerActivated() {
+        return isMinerActivated;
+    }
+
+    public void setMinerActivated(boolean minerActivated) {
+        isMinerActivated = minerActivated;
     }
 }
 

@@ -13,14 +13,17 @@ public class ModEvents {
 
     public static final KeyBinding MINER_ACTIVATED_KEY = KeyBindingHelper.registerKeyBinding(
             new KeyBinding("key.miningmod.miner_activated",
-                    InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_SHIFT,
+                    InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT,
                     "category.mining_mod.block_broken"));
 
     public static void registerEventHandlers(){
-        PlayerBlockBreakEvents.BEFORE.register(BlockBrokenEventHandler::onBlockBroken);
+        PlayerBlockBreakEvents.BEFORE.register((BLOCK_BROKEN_HANDLER::onBlockBroken));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if(MINER_ACTIVATED_KEY.wasPressed() && client.player != null){
-                client.player.sendMessage(Text.literal("Shift key pressed"));
+            if(MINER_ACTIVATED_KEY.isPressed() && client.player != null){
+               BLOCK_BROKEN_HANDLER.setMinerActivated(true);
+            }
+            else if(BLOCK_BROKEN_HANDLER.isMinerActivated()){
+                BLOCK_BROKEN_HANDLER.setMinerActivated(false);
             }
         });
     }
