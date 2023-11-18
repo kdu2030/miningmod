@@ -1,3 +1,7 @@
 {
-  "item.miningmod.smart_iron_axe": "Smart Iron Axe"
+  "item.miningmod.smart_iron_axe": "Smart Iron Axe",
+
+  "key.miningmod.miner_activated": "Active Miner Key",
+  "category.mining_mod.block_broken": "Breaking Blocks Settings"
+
 }

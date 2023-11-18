@@ -1,6 +1,6 @@
 package kevin.miningmod;
 
-import kevin.miningmod.events.BlockBrokenEvent;
+import kevin.miningmod.events.ModEvents;
 import kevin.miningmod.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
@@ -21,6 +21,6 @@ public class MiningMod implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 		ModItems.registerModItems();
-		BlockBrokenEvent.registerBlockBrokenEventHandlers();
+		ModEvents.registerEventHandlers();
 	}
 }

@@ -1,6 +1,5 @@
 package kevin.miningmod.events;
 
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,10 +10,17 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-public class BlockBrokenEvent {
+public class BlockBrokenEventHandler {
+
+    private boolean isMinerActivated;
+
     public static final int MAX_DISTANCE = 3;
     public static final Vec3i[] BLOCK_POS_MODS = {new Vec3i(1, 0, 0), new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0),
             new Vec3i(0, -1, 0), new Vec3i(0, 0, 1), new Vec3i(0, 0, -1)};
+
+    public BlockBrokenEventHandler(){
+        isMinerActivated = false;
+    }
 
     private static float calculateDistance(BlockPos blockA, BlockPos blockB) {
         float radicand = MathHelper.square(blockB.getX() - blockA.getX()) + MathHelper.square(blockB.getY() - blockA.getY()) + MathHelper.square(blockB.getZ() - blockA.getZ());
@@ -62,10 +68,5 @@ public class BlockBrokenEvent {
         findBlocksOfTheSameType(world, startingBlock);
         return true;
     }
-
-    public static void registerBlockBrokenEventHandlers(){
-        PlayerBlockBreakEvents.BEFORE.register(BlockBrokenEvent::onBlockBroken);
-    }
-
 }
 
