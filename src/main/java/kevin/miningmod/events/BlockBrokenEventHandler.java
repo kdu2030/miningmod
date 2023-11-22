@@ -6,6 +6,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,12 +20,15 @@ public class BlockBrokenEventHandler {
 
     private boolean isMinerActivated;
 
+    private Set<PlayerEntity> playersWithActivatedMiners;
+
     public static final int MAX_DISTANCE = 3;
     public static final Vec3i[] BLOCK_POS_MODS = {new Vec3i(1, 0, 0), new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0),
             new Vec3i(0, -1, 0), new Vec3i(0, 0, 1), new Vec3i(0, 0, -1)};
 
     public BlockBrokenEventHandler(){
         isMinerActivated = false;
+        playersWithActivatedMiners = new HashSet<>();
     }
 
     private static float calculateDistance(BlockPos blockA, BlockPos blockB) {
@@ -64,11 +69,10 @@ public class BlockBrokenEventHandler {
         int damageAmount = (int) (blockBroken.getHardness() * numBlocksBroken);
         int originalDurability  = activeItemStack.getDamage();
         if(activeItemStack.isDamageable()){
-            activeItemStack.damage(damageAmount, player, (p) -> {
-                if(originalDurability - damageAmount <= 0){
-                    player.handleStatus(hand == Hand.MAIN_HAND ? EntityStatuses.BREAK_MAINHAND : EntityStatuses.BREAK_OFFHAND);
-                }
-            });
+            if(originalDurability - damageAmount <= 0){
+                player.handleStatus(hand == Hand.MAIN_HAND ? EntityStatuses.BREAK_MAINHAND : EntityStatuses.BREAK_OFFHAND);
+            }
+            activeItemStack.damage(damageAmount, player, (p) -> {});
         }
     }
 
@@ -94,7 +98,9 @@ public class BlockBrokenEventHandler {
     }
 
     public boolean onBlockBroken(World world, PlayerEntity player, BlockPos blockPos, BlockState blockState, BlockEntity block) {
+        // This runs on the server
         if(isMinerActivated){
+            world.playSound(player, blockPos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS);
             BlockData startingBlock = new BlockData(blockPos, blockState);
             findBlocksOfTheSameType(world, startingBlock, player);
         }

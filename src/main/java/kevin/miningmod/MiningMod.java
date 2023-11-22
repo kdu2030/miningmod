@@ -1,5 +1,6 @@
 package kevin.miningmod;
 
+import kevin.miningmod.client.ModClientEvents;
 import kevin.miningmod.events.ModEvents;
 import kevin.miningmod.item.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -22,5 +23,6 @@ public class MiningMod implements ModInitializer {
 		LOGGER.info("Hello Fabric world!");
 		ModItems.registerModItems();
 		ModEvents.registerEventHandlers();
+		ModClientEvents.registerModClientEvents();
 	}
 }
