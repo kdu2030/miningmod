@@ -17,8 +17,11 @@ public class ModClientEvents {
 
     public static void registerModClientEvents() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if(MINER_ACTIVATED_KEY.isPressed() && client.player != null){
+            if(MINER_ACTIVATED_KEY.isPressed() && !minerActivatedHandler.isClientMinerActivated()){
                 minerActivatedHandler.handleMinerActivateKeyPress(client);
+            }
+            else if(!MINER_ACTIVATED_KEY.isPressed() && minerActivatedHandler.isClientMinerActivated()) {
+                minerActivatedHandler.handleMinerDeactivateKeyRelease(client);
             }
         });
     }

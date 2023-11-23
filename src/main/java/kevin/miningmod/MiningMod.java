@@ -3,7 +3,9 @@ package kevin.miningmod;
 import kevin.miningmod.client.ModClientEvents;
 import kevin.miningmod.events.ModEvents;
 import kevin.miningmod.item.ModItems;
+import kevin.miningmod.server.ServerReceivers;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.server.network.ServerRecipeBook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,5 +26,6 @@ public class MiningMod implements ModInitializer {
 		ModItems.registerModItems();
 		ModEvents.registerEventHandlers();
 		ModClientEvents.registerModClientEvents();
+		ServerReceivers.registerServerReceivers();
 	}
 }

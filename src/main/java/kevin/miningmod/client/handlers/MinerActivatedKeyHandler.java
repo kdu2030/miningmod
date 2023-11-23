@@ -19,18 +19,23 @@ public class MinerActivatedKeyHandler {
         }
 
         PacketByteBuf packetPayload = PacketByteBufs.create();
-        packetPayload.writeInt(client.player.getId());
-
-        if(isClientMinerActivated){
-            // Send a packet to the server with the player network ID activate miner ID
-            ClientPlayNetworking.send(ModNetworkingConstants.ACTIVATE_MINER_ID, packetPayload);
-            isClientMinerActivated = true;
-        } else {
-            // Send a packet to deactivate the player's miner
-            ClientPlayNetworking.send(ModNetworkingConstants.DEACTIVATE_MINER_ID, packetPayload);
-            isClientMinerActivated = false;
-        }
+        packetPayload.writeUuid(client.player.getUuid());
+        ClientPlayNetworking.send(ModNetworkingConstants.ACTIVATE_MINER_ID, packetPayload);
+        isClientMinerActivated = true;
     }
 
+    public void handleMinerDeactivateKeyRelease(MinecraftClient client){
+        if(client.player == null){
+            return;
+        }
 
+        PacketByteBuf packetPayload = PacketByteBufs.create();
+        packetPayload.writeUuid(client.player.getUuid());
+        ClientPlayNetworking.send(ModNetworkingConstants.DEACTIVATE_MINER_ID, packetPayload);
+        isClientMinerActivated = false;
+    }
+
+    public boolean isClientMinerActivated() {
+        return isClientMinerActivated;
+    }
 }
