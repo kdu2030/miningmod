@@ -5,33 +5,30 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 
 public class MinerActivatedKeyHandler {
     private boolean isClientMinerActivated;
 
-    public MinerActivatedKeyHandler(){
+    public MinerActivatedKeyHandler() {
         isClientMinerActivated = false;
     }
 
-    public void handleMinerActivateKeyPress(MinecraftClient client){
-        if(client.player == null){
+    private void sendPacketToUpdateMiner(MinecraftClient client, Identifier serverEndpointId) {
+        if (client.player == null) {
             return;
         }
+        PacketByteBuf packetPayload = PacketByteBufs.empty();
+        ClientPlayNetworking.send(serverEndpointId, packetPayload);
+    }
 
-        PacketByteBuf packetPayload = PacketByteBufs.create();
-        packetPayload.writeUuid(client.player.getUuid());
-        ClientPlayNetworking.send(ModNetworkingConstants.ACTIVATE_MINER_ID, packetPayload);
+    public void handleMinerActivateKeyPress(MinecraftClient client) {
+        sendPacketToUpdateMiner(client, ModNetworkingConstants.ACTIVATE_MINER_ID);
         isClientMinerActivated = true;
     }
 
-    public void handleMinerDeactivateKeyRelease(MinecraftClient client){
-        if(client.player == null){
-            return;
-        }
-
-        PacketByteBuf packetPayload = PacketByteBufs.create();
-        packetPayload.writeUuid(client.player.getUuid());
-        ClientPlayNetworking.send(ModNetworkingConstants.DEACTIVATE_MINER_ID, packetPayload);
+    public void handleMinerDeactivateKeyRelease(MinecraftClient client) {
+        sendPacketToUpdateMiner(client, ModNetworkingConstants.DEACTIVATE_MINER_ID);
         isClientMinerActivated = false;
     }
 
