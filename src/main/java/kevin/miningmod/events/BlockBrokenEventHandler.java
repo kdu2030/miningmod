@@ -17,17 +17,12 @@ import net.minecraft.world.World;
 import java.util.*;
 
 public class BlockBrokenEventHandler {
-
-    private boolean isMinerActivated;
-
-    private Set<PlayerEntity> playersWithActivatedMiners;
-
+    private final Set<PlayerEntity> playersWithActivatedMiners;
     public static final int MAX_DISTANCE = 3;
     public static final Vec3i[] BLOCK_POS_MODS = {new Vec3i(1, 0, 0), new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0),
             new Vec3i(0, -1, 0), new Vec3i(0, 0, 1), new Vec3i(0, 0, -1)};
 
     public BlockBrokenEventHandler(){
-        isMinerActivated = false;
         playersWithActivatedMiners = new HashSet<>();
     }
 
@@ -99,19 +94,21 @@ public class BlockBrokenEventHandler {
 
     public boolean onBlockBroken(World world, PlayerEntity player, BlockPos blockPos, BlockState blockState, BlockEntity block) {
         // This runs on the server
-        if(isMinerActivated){
+        if (playersWithActivatedMiners.contains(player)) {
             world.playSound(player, blockPos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS);
             BlockData startingBlock = new BlockData(blockPos, blockState);
             findBlocksOfTheSameType(world, startingBlock, player);
         }
         return true;
     }
-    public boolean isMinerActivated() {
-        return isMinerActivated;
+
+    public void activatePlayerMiner(PlayerEntity player){
+        playersWithActivatedMiners.add(player);
     }
 
-    public void setMinerActivated(boolean minerActivated) {
-        isMinerActivated = minerActivated;
+    public void deactivatePlayerMiner(PlayerEntity player){
+        playersWithActivatedMiners.remove(player);
     }
+
 }
 
