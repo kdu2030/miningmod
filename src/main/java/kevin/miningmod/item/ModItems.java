@@ -1,17 +1,14 @@
 package kevin.miningmod.item;
 
 import kevin.miningmod.MiningMod;
+import kevin.miningmod.block.ModBlocks;
 import kevin.miningmod.item.custom.SmartAxe;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 public class ModItems {
@@ -22,14 +19,14 @@ public class ModItems {
         return Registry.register(Registries.ITEM, new Identifier(MiningMod.MOD_ID, itemId), item);
     }
 
-    public static void addItemsToItemGroup(FabricItemGroupEntries entries, Item... items){
-        for(Item item: items){
+    public static void addItemsToItemGroup(FabricItemGroupEntries entries, ItemConvertible... items){
+        for(ItemConvertible item: items){
             entries.add(item);
         }
     }
 
     public static void registerModItems(){
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> addItemsToItemGroup(entries, ModItems.SMART_IRON_AXE));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> addItemsToItemGroup(entries, ModItems.SMART_IRON_AXE, ModBlocks.MINER_ROBOT));
     }
 
 }

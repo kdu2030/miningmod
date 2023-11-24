@@ -15,6 +15,9 @@
 	"icon": "assets/miningmod/icon.png",
 	"environment": "*",
 	"entrypoints": {
+		"client": [
+			"kevin.miningmod.MiningModClient"
+		],
 		"main": [
 			"kevin.miningmod.MiningMod"
 		],

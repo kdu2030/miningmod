@@ -1,2 +1,6 @@
-// 1.20	2023-11-13T17:45:03.2240714	miningmod/Model Definitions
+// 1.20	2023-11-24T10:56:35.5337765	miningmod/Model Definitions
+1257ca986bcaacc733d1083f8c538ca30956bea3 assets\miningmod\blockstates\miner_robot.json
+d1f0060e96368b04cdeab86d37fa7a71920afd2c assets\miningmod\models\block\miner_robot_vertical.json
+aa1c90a1bdbe82087c9389326bcb2a24fdb2164f assets\miningmod\models\block\miner_robot.json
 6be981bb90edda4bb903ef4617079a7421a23f10 assets\miningmod\models\item\smart_iron_axe.json
+9854f0fcf349b6d93fc84ad967dfde00f70bd10e assets\miningmod\models\item\miner_robot.json
