@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class ModBlocks {
 
-    public static Block MINER_ROBOT = registerBlock("miner_robot", new MinerRobot(FabricBlockSettings.copyOf(Blocks.DISPENSER)));
+    public static Block MINER_ROBOT = registerBlock("miner_robot", new MinerRobot(10, FabricBlockSettings.copyOf(Blocks.DISPENSER)));
 
     public static Block registerBlock(String blockId, Block block){
         registerBlockItem(blockId, block);

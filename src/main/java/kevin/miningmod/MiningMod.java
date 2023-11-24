@@ -1,6 +1,7 @@
 package kevin.miningmod;
 
 import kevin.miningmod.block.ModBlocks;
+import kevin.miningmod.block.entity.ModBlockEntities;
 import kevin.miningmod.events.ModEvents;
 import kevin.miningmod.item.ModItems;
 import kevin.miningmod.server.ServerReceivers;
@@ -24,6 +25,7 @@ public class MiningMod implements ModInitializer {
         LOGGER.info("Hello Fabric world!");
         ModItems.registerModItems();
         ModBlocks.registerModBlocks();
+        ModBlockEntities.registerModBlockEntities();
         ModEvents.registerEventHandlers();
         ServerReceivers.registerServerReceivers();
     }
