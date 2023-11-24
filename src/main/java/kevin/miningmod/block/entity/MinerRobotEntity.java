@@ -22,9 +22,9 @@ public class MinerRobotEntity extends BlockEntity {
 
     @Override
     public void readNbt(NbtCompound nbt) {
-        nbt.getUuid(PLAYER_ID_KEY);
-        nbt.getBoolean(IS_MINING_KEY);
-        nbt.getInt(MINING_USAGES_KEY);
+        playerId = nbt.getUuid(PLAYER_ID_KEY);
+        isMining = nbt.getBoolean(IS_MINING_KEY);
+        miningUsages = nbt.getInt(MINING_USAGES_KEY);
         super.readNbt(nbt);
     }
     @Override

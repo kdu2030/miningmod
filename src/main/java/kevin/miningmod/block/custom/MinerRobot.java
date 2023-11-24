@@ -28,7 +28,7 @@ public class MinerRobot extends DispenserBlock {
 
     public void updateRobotEntity(MinerRobotEntity robotEntity, boolean isMining, PlayerEntity player){
         robotEntity.setMining(isMining);
-        robotEntity.setPlayerId(player != null ? player.getUuid() : null);
+        robotEntity.setPlayerId(player.getUuid());
         robotEntity.markDirty();
     }
 

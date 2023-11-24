@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "miningmod:block/miner_robot_vertical",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "miningmod:block/miner_robot",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "miningmod:block/miner_robot"
+    },
+    "facing=south": {
+      "model": "miningmod:block/miner_robot",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "miningmod:block/miner_robot_vertical"
+    },
+    "facing=west": {
+      "model": "miningmod:block/miner_robot",
+      "y": 270
+    }
+  }
+}
